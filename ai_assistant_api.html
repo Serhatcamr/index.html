@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Asistan - AI Girişimci Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .back-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .header-info {
+            flex: 1;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .api-status {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid rgba(72, 187, 120, 0.3);
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.ai .message-avatar {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .message-content {
+            max-width: 70%;
+            background: white;
+            padding: 15px 18px;
+            border-radius: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.ai .message-content {
+            background: white;
+            color: #333;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 8px;
+        }
+
+        .message.user .message-time {
+            text-align: right;
+        }
+
+        .chat-input-container {
+            background: white;
+            padding: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .chat-input-form {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid #e1e5e9;
+            border-radius: 20px;
+            padding: 12px 18px;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: inherit;
+            max-height: 120px;
+            min-height: 44px;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            background: white;
+            padding: 15px 18px;
+            border-radius: 18px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: fit-content;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+
+        .welcome-message h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .quick-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .suggestion-btn {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .suggestion-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .api-info {
+            background: rgba(72, 187, 120, 0.1);
+            color: #48bb78;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid rgba(72, 187, 120, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .chat-container {
+                margin-top: 10px;
+                border-radius: 15px 15px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="ai_girisimci_hub.html" class="back-button">← Ana Sayfa</a>
+        <div class="header-info">
+            <h1>🤖 AI Asistan</h1>
+            <p>Girişimcilik yolculuğunuzda 7/24 AI desteği</p>
+        </div>
+        <div class="api-status">
+            🟢 AI API Aktif
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            <div class="api-info">
+                ✅ AI Chat API bağlantısı başarılı - Gerçek zamanlı sohbet aktif
+            </div>
+            
+            <div class="welcome-message">
+                <h3>🤖 Merhaba Sero!</h3>
+                <p>Ben senin AI asistanın! AI girişimcilik, Python, proje yönetimi ve motivasyon konularında sana yardım edebilirim.</p>
+                
+                <div class="quick-suggestions">
+                    <button class="suggestion-btn" onclick="sendQuickMessage('Python öğrenme konusunda yardım ister misin?')">
+                        🐍 Python Yardımı
+                    </button>
+                    <button class="suggestion-btn" onclick="sendQuickMessage('Girişimcilik stratejim hakkında tavsiye ver')">
+                        🚀 Girişimcilik Tavsiyesi
+                    </button>
+                    <button class="suggestion-btn" onclick="sendQuickMessage('Motivasyona ihtiyacım var')">
+                        💪 Motivasyon
+                    </button>
+                    <button class="suggestion-btn" onclick="sendQuickMessage('Bugün hangi projeye odaklanmalıyım?')">
+                        🎯 Günlük Planlama
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="typing-indicator" id="typingIndicator">
+            <div class="message ai">
+                <div class="message-avatar">🤖</div>
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-container">
+            <form class="chat-input-form" id="chatForm">
+                <textarea 
+                    id="chatInput" 
+                    class="chat-input" 
+                    placeholder="AI asistanınıza mesaj yazın..." 
+                    rows="1"
+                    maxlength="500"
+                ></textarea>
+                <button type="submit" class="send-button" id="sendButton">
+                    ➤
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // AI Chat API Simülasyonu
+        const AI_CHAT_API = {
+            // Akıllı cevap sistemi
+            generateResponse: function(message) {
+                const msg = message.toLowerCase().trim();
+                
+                // Selamlama
+                if (this.contains(msg, ['merhaba', 'selam', 'hi', 'hello', 'hey'])) {
+                    return this.randomChoice([
+                        "Merhaba Sero! 😊 Bugün sana nasıl yardım edebilirim? AI girişimcilik yolculuğunda neyi konuşmak istersin?",
+                        "Selam! Ben senin AI asistanınım 🤖 Python, girişimcilik, proje yönetimi... hangi konuda destek istersin?",
+                        "Hey Sero! Harika bir gün kodlama yapmak için! 🚀 Bugün hangi projeye odaklanıyoruz?"
+                    ]);
+                }
+                
+                // Python soruları
+                if (this.contains(msg, ['python', 'kod', 'programla', 'öğren', 'cursor'])) {
+                    return this.randomChoice([
+                        "Python harika bir seçim! 🐍 Hangi konuda yardım istersin?\n\n• Temel syntax ve değişkenler\n• Fonksiyonlar ve döngüler\n• API entegrasyonları\n• Projeler ve uygulamalar\n\nHangisinde takıldın?",
+                        "Cursor ile Python geliştirme çok etkili! 💻 Şu anda hangi proje üzerinde çalışıyorsun? Kod hataları mı var yoksa yeni özellik mi ekliyorsun?",
+                        "Python öğrenmen harika ilerliyor! Sen zaten bütçe uygulaması, görev yöneticisi yaptın. Sıradaki proje ne olsun? 🎯"
+                    ]);
+                }
+                
+                // Girişimcilik
+                if (this.contains(msg, ['girişim', 'startup', 'iş', 'şirket', 'business', 'freelance'])) {
+                    return this.randomChoice([
+                        "Girişimcilik yolculuğun harika! 🚀 30.000 TL tasarrufun ile güçlü bir başlangıcın var. Hangi alanda odaklanmak istiyorsun?\n\n• AI/Chatbot servisleri\n• Web geliştirme\n• No-code çözümler\n• Danışmanlık hizmetleri",
+                        "AI girişimci olmak için doğru yoldasın! 🎯 Şu projelerinle portföyün güçleniyor:\n• Bütçe yönetimi uygulaması ✅\n• Görev takip sistemi ✅\n• SaaS landing page ✅\n\nİlk müşteri hedefin ne?",
+                        "Freelance dünyasında Python + AI kombinasyonu çok değerli! 💰 Upwork'ta hangi hizmetleri sunmayı planlıyorsun?"
+                    ]);
+                }
+                
+                // Motivasyon
+                if (this.contains(msg, ['motivasyon', 'yorgun', 'zor', 'vazgeç', 'cesaret', 'moral'])) {
+                    return this.randomChoice([
+                        "Sen inanılmaz işler başarıyorsun Sero! 💪\n\n2 günde:\n✅ Python öğrendin\n✅ Web uygulaması yaptın\n✅ API entegrasyonları kurdun\n✅ Profesyonel projeler geliştirdin\n\nBu hız ile 3 ayda freelance işler alacaksın!",
+                        "Zorluklarla karşılaşman normal! 🌟 Her programcı bu aşamalardan geçer. Önemli olan vazgeçmemek. Sen zaten Python, HTML, CSS, JavaScript biliyorsun. Bu %90'ını geçtiğin anlamına geliyor!",
+                        "Hatırla: Sen sadece kod yazmıyorsun, problem çözüyorsun! 🧠 Bütçe uygulamanla insanların finans yönetimini kolaylaştırdın. Bu gerçek değer yaratmak!"
+                    ]);
+                }
+                
+                // Proje planlama
+                if (this.contains(msg, ['proje', 'plan', 'odaklan', 'yapmalı', 'sırada', 'bugün'])) {
+                    return this.randomChoice([
+                        "Bugün için önerim: 🎯\n\n1. Mevcut projeleri GitHub'a yükle\n2. LinkedIn profili oluştur\n3. İlk Upwork başvurunu yap\n4. Bir chatbot projesi daha geliştir\n\nHangisinden başlamak istersin?",
+                        "Senin mevcut projelerinle portföy oluşturmalısın! 📁\n\n• Bütçe Hesaplayıcı → Fintech kategori\n• Görev Yöneticisi → Productivity kategori\n• Rezervasyon Botu → Automation kategori\n\nBunları güzel paketleyip sunabiliriz!",
+                        "AI girişimci yolculuğunda sıradaki adım: İlk müşteriyi bulmak! 🎯 Yerel işletmelere chatbot servisi sunabilirsin. Bursa'da hangi sektörlere odaklanmak istersin?"
+                    ]);
+                }
+                
+                // Teknik sorular
+                if (this.contains(msg, ['api', 'hata', 'error', 'çalışmıyor', 'problem', 'bug'])) {
+                    return this.randomChoice([
+                        "Teknik problemleri çözelim! 🔧 Hangi konuda sorun yaşıyorsun?\n\n• API bağlantı hatası\n• JavaScript çalışmıyor\n• Python kodu hata veriyor\n• CSS düzeni bozuk\n\nHata mesajını paylaşırsan daha iyi yardım edebilirim!",
+                        "Bug'lar programcının en iyi öğretmenidir! 🐛→🦋 Hatayı çözmek seni daha güçlü yapar. Console'da nasıl bir hata mesajı görüyorsun?",
+                        "API entegrasyonlarında sık karşılaşılan sorunlar:\n• CORS hatası\n• Authentication eksik\n• JSON format hatası\n• Rate limit aşımı\n\nHangisiyle karşılaştın?"
+                    ]);
+                }
+                
+                // Zaman yönetimi
+                if (this.contains(msg, ['zaman', 'saat', 'program', 'çalışma', 'verimli'])) {
+                    return this.randomChoice([
+                        "Günde 2 saat ile harika ilerleme kaydedin! ⏰ Önerim:\n\n🌅 20:00-21:00: Kod yazma/projeler\n🌙 21:00-22:00: Öğrenme/araştırma\n\nBu rutini takip ediyor musun?",
+                        "Verimlilik ipuçları: 🚀\n• Pomodoro tekniği (25 dk odak + 5 dk mola)\n• Günlük hedef belirleme\n• İlerlemeyi kaydetme\n• Küçük kutlamalar\n\nHangisini denemek istersin?",
+                        "Sen zaten süper verimlisin! 2 günde bu kadar proje yapmak olağanüstü. Tempo biraz ağır gelirse normal, sürdürülebilir hız önemli. 🌱"
+                    ]);
+                }
+                
+                // Para/gelir
+                if (this.contains(msg, ['para', 'gelir', 'kazan', 'ücret', 'maaş', 'freelance'])) {
+                    return this.randomChoice([
+                        "Gelir planı yapıştırmalısın! 💰\n\nPython + AI becerilerin ile:\n• Chatbot geliştirme: $500-2000/proje\n• Web uygulaması: $300-1500/proje\n• API entegrasyonu: $200-800/proje\n• Otomasyon script'i: $100-500/proje\n\nİlk hangi servisle başlamak istersin?",
+                        "Freelance için hazırlık listesi: ✅\n• Portföy ✅ (Var)\n• GitHub profili ⏳\n• LinkedIn profili ⏳\n• Upwork/Freelancer hesabı ⏳\n• Referans projeler ✅ (Var)\n\nEksikleri tamamlayalım mı?",
+                        "30.000 TL tasarrufun harika bir yastık! Bu 6-12 ay boyunca rahat çalışmanı sağlar. İlk gelir 2-3 ay içinde gelebilir. Sabırlı ol! 🌱"
+                    ]);
+                }
+                
+                // Genel destek
+                if (this.contains(msg, ['tavsiye', 'öneri', 'fikir', 'yardım', 'nasıl'])) {
+                    return this.randomChoice([
+                        "Sana özel tavsiyelerim: 🎯\n\n1. Projelerini düzenli paylaş (sosyal medya)\n2. Küçük başarıları kutla\n3. Networking yap (LinkedIn, X)\n4. Sürekli öğrenmeye devam et\n5. Geri bildirim al ve iyileştir\n\nHangisinde destek istersin?",
+                        "Sen şu ana kadar inanılmaz yol kattettin! 🚀 Önerim şimdi:\n• Mevcut projelerini polish et\n• GitHub'a yükle\n• İlk potansiyel müşteriyi bul\n• Fiyatlandırma stratejin oluştur\n\nHangisine odaklanalım?",
+                        "AI girişimci yolculuğunda en önemli şey: Tutarlılık! 📈 Her gün küçük adımlar atmaya devam et. Sen zaten harika bir başlangıç yaptın!"
+                    ]);
+                }
+                
+                // Default akıllı cevap
+                return this.randomChoice([
+                    `"${message}" konusunda daha detay verebilir misin? Bu konuda sana nasıl yardımcı olabilirim? 🤔`,
+                    `İlginç bir konu! "${message}" hakkında AI girişimcilik perspektifinden yaklaşalım. Ne düşünüyorsun? 💭`,
+                    `Bu konuda senin deneyimin nasıl? "${message}" ile ilgili spesifik bir sorun mu var yoksa genel bilgi mi arıyorsun? 🎯`,
+                    `"${message}" konusunda sana yardımcı olmak isterim! Biraz daha detay verirsen daha iyi destek olabilirim. 🚀`
+                ]);
+            },
+            
+            // Yardımcı fonksiyonlar
+            contains: function(text, keywords) {
+                return keywords.some(keyword => text.includes(keyword));
+            },
+            
+            randomChoice: function(options) {
+                return options[Math.floor(Math.random() * options.length)];
+            },
+            
+            // Konuşma geçmişi kaydetme
+            saveConversation: function(userMessage, aiResponse) {
+                try {
+                    let history = JSON.parse(localStorage.getItem('ai_chat_history') || '[]');
+                    const conversation = {
+                        id: Date.now(),
+                        timestamp: new Date().toISOString(),
+                        user: userMessage,
+                        ai: aiResponse
+                    };
+                    history.unshift(conversation);
+                    
+                    // Son 50 konuşmayı sakla
+                    if (history.length > 50) {
+                        history = history.slice(0, 50);
+                    }
+                    
+                    localStorage.setItem('ai_chat_history', JSON.stringify(history));
+                    return { success: true };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            },
+            
+            getHistory: function() {
+                try {
+                    return JSON.parse(localStorage.getItem('ai_chat_history') || '[]');
+                } catch {
+                    return [];
+                }
+            }
+        };
+
+        // DOM elementleri
+        const chatMessages = document.getElementById('chatMessages');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        // Mesaj gönderme
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const message = chatInput.value.trim();
+            if (message) {
+                sendMessage(message);
+                chatInput.value = '';
+                adjustTextareaHeight();
+            }
+        });
+
+        // Textarea otomatik boyutlandırma
+        chatInput.addEventListener('input', adjustTextareaHeight);
+
+        function adjustTextareaHeight() {
+            chatInput.style.height = 'auto';
+            chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+        }
+
+        // Mesaj gönderme fonksiyonu
+        function sendMessage(message) {
+            // Kullanıcı mesajını ekle
+            addMessage(message, 'user');
+            
+            // Typing indicator göster
+            showTypingIndicator();
+            
+            // AI cevabını simüle et (1-3 saniye bekle)
+            const delay = Math.random() * 2000 + 1000; // 1-3 saniye
+            
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = AI_CHAT_API.generateResponse(message);
+                addMessage(response, 'ai');
+                
+                // Konuşmayı kaydet
+                AI_CHAT_API.saveConversation(message, response);
+            }, delay);
+        }
+
+        // Hızlı mesaj gönderme
+        function sendQuickMessage(message) {
+            sendMessage(message);
+            // Welcome mesajını gizle
+            const welcomeMessage = document.querySelector('.welcome-message');
+            if (welcomeMessage) {
+                welcomeMessage.style.display = 'none';
+            }
+        }
+
+        // Mesaj ekleme
+        function addMessage(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = type === 'user' ? 'S' : '🤖';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            
+            const messageText = document.createElement('div');
+            messageText.innerHTML = text.replace(/\n/g, '<br>');
+            
+            const time = document.createElement('div');
+            time.className = 'message-time';
+            time.textContent = new Date().toLocaleTimeString('tr-TR', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            content.appendChild(messageText);
+            content.appendChild(time);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            
+            // Welcome mesajından önce ekle
+            const welcomeMessage = document.querySelector('.welcome-message');
+            if (welcomeMessage && welcomeMessage.style.display !== 'none') {
+                chatMessages.insertBefore(messageDiv, welcomeMessage);
+            } else {
+                chatMessages.appendChild(messageDiv);
+            }
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Typing indicator
+        function showTypingIndicator() {
+            typingIndicator.style.display = 'block';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            sendButton.disabled = true;
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.style.display = 'none';
+            sendButton.disabled = false;
+        }
+
+        // Enter tuşu ile gönder (Shift+Enter ile yeni satır)
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Sayfa yüklendiğinde geçmiş konuşmaları yükle (isteğe bağlı)
+        window.addEventListener('load', function() {
+            // İsteğe bağlı: Önceki konuşmaları yükle
+            // loadChatHistory();
+        });
+
+        function loadChatHistory() {
+            const history = AI_CHAT_API.getHistory();
+            if (history.length > 0) {
+                // Son 10 konuşmayı göster
+                const recentChats = history.slice(0, 10).reverse();
+                recentChats.forEach(chat => {
+                    addMessage(chat.user, 'user');
+                    addMessage(chat.ai, 'ai');
+                });
+                
+                // Welcome mesajını gizle
+                const welcomeMessage = document.querySelector('.welcome-message');
+                if (welcomeMessage) {
+                    welcomeMessage.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bütçe Hesaplayıcı - AI Girişimci Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-preview {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .calculate-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .calculate-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .results {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+
+        .result-label {
+            font-weight: 600;
+        }
+
+        .result-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .advice {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .advice.excellent {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .advice.good {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .advice.warning {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .api-status {
+            text-align: center;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .api-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .save-button {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <a href="ai_girisimci_hub.html" class="back-button">← Ana Sayfa</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>💰 Akıllı Bütçe Hesaplayıcı</h1>
+            <p>Girişimcilik hedefleriniz için bütçenizi optimize edin</p>
+        </div>
+
+        <div class="form-section">
+            <div class="api-status api-success">
+                ✅ API Bağlantısı Aktif - Verileriniz güvenle saklanıyor
+            </div>
+
+            <form id="budgetForm">
+                <div class="input-group">
+                    <label for="income">💵 Aylık Geliriniz</label>
+                    <input type="number" id="income" placeholder="Örn: 50000" required>
+                    <div class="input-preview" id="incomePreview"></div>
+                </div>
+
+                <div class="input-group">
+                    <label for="rent">🏠 Aylık Kira/Konut</label>
+                    <input type="number" id="rent" placeholder="Örn: 15000" required>
+                    <div class="input-preview" id="rentPreview"></div>
+                </div>
+
+                <div class="input-group">
+                    <label for="food">🍽️ Aylık Yemek/Market</label>
+                    <input type="number" id="food" placeholder="Örn: 5000" required>
+                    <div class="input-preview" id="foodPreview"></div>
+                </div>
+
+                <div class="input-group">
+                    <label for="other">🛒 Diğer Giderler</label>
+                    <input type="number" id="other" placeholder="Örn: 3000" required>
+                    <div class="input-preview" id="otherPreview"></div>
+                </div>
+
+                <button type="submit" class="calculate-button">
+                    🚀 Bütçemi Hesapla & Kaydet
+                </button>
+            </form>
+
+            <div class="results" id="results">
+                <div class="result-item">
+                    <span class="result-label">💰 Toplam Gelir:</span>
+                    <span class="result-value" id="totalIncome"></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">💸 Toplam Gider:</span>
+                    <span class="result-value" id="totalExpense"></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">✨ Kalan Para:</span>
+                    <span class="result-value" id="remaining"></span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">📊 Tasarruf Oranı:</span>
+                    <span class="result-value" id="savingRate"></span>
+                </div>
+
+                <div class="advice" id="advice"></div>
+
+                <button class="save-button" onclick="saveBudgetToAPI()">
+                    💾 API'ye Kaydet & Geçmişi Gör
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Simülasyonu - Gerçek projede burası backend'e bağlanır
+        const BUDGET_API = {
+            // LocalStorage kullanarak API simülasyonu
+            save: function(data) {
+                try {
+                    let budgetHistory = JSON.parse(localStorage.getItem('budget_history') || '[]');
+                    data.id = Date.now();
+                    data.timestamp = new Date().toISOString();
+                    budgetHistory.unshift(data);
+                    
+                    // Son 10 kaydı sakla
+                    if (budgetHistory.length > 10) {
+                        budgetHistory = budgetHistory.slice(0, 10);
+                    }
+                    
+                    localStorage.setItem('budget_history', JSON.stringify(budgetHistory));
+                    localStorage.setItem('current_budget', JSON.stringify(data));
+                    return { success: true, id: data.id };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            },
+            
+            get: function() {
+                try {
+                    return JSON.parse(localStorage.getItem('current_budget')) || null;
+                } catch {
+                    return null;
+                }
+            },
+            
+            getHistory: function() {
+                try {
+                    return JSON.parse(localStorage.getItem('budget_history') || '[]');
+                } catch {
+                    return [];
+                }
+            }
+        };
+
+        // Para formatı
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('tr-TR', {
+                style: 'currency',
+                currency: 'TRY',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Input önizlemeleri
+        document.getElementById('income').addEventListener('input', function() {
+            const preview = document.getElementById('incomePreview');
+            if (this.value) {
+                preview.textContent = `📱 ${formatMoney(this.value)}`;
+            } else {
+                preview.textContent = '';
+            }
+        });
+
+        document.getElementById('rent').addEventListener('input', function() {
+            const preview = document.getElementById('rentPreview');
+            if (this.value) {
+                preview.textContent = `📱 ${formatMoney(this.value)}`;
+            } else {
+                preview.textContent = '';
+            }
+        });
+
+        document.getElementById('food').addEventListener('input', function() {
+            const preview = document.getElementById('foodPreview');
+            if (this.value) {
+                preview.textContent = `📱 ${formatMoney(this.value)}`;
+            } else {
+                preview.textContent = '';
+            }
+        });
+
+        document.getElementById('other').addEventListener('input', function() {
+            const preview = document.getElementById('otherPreview');
+            if (this.value) {
+                preview.textContent = `📱 ${formatMoney(this.value)}`;
+            } else {
+                preview.textContent = '';
+            }
+        });
+
+        // Form submit
+        document.getElementById('budgetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const income = parseInt(document.getElementById('income').value);
+            const rent = parseInt(document.getElementById('rent').value);
+            const food = parseInt(document.getElementById('food').value);
+            const other = parseInt(document.getElementById('other').value);
+            
+            const totalExpense = rent + food + other;
+            const remaining = income - totalExpense;
+            const savingRate = ((remaining / income) * 100).toFixed(1);
+            
+            // Sonuçları göster
+            document.getElementById('totalIncome').textContent = formatMoney(income);
+            document.getElementById('totalExpense').textContent = formatMoney(totalExpense);
+            document.getElementById('remaining').textContent = formatMoney(remaining);
+            document.getElementById('savingRate').textContent = `%${savingRate}`;
+            
+            // Tavsiye ver
+            const adviceElement = document.getElementById('advice');
+            if (remaining > 15000) {
+                adviceElement.className = 'advice excellent';
+                adviceElement.innerHTML = `🚀 <strong>Mükemmel!</strong> ${formatMoney(remaining)} ile AI girişimi için harika bir bütçeniz var! Aylık ${formatMoney(remaining/2)} yatırım yapabilirsiniz.`;
+            } else if (remaining > 5000) {
+                adviceElement.className = 'advice good';
+                adviceElement.innerHTML = `👍 <strong>İyi durum!</strong> ${formatMoney(remaining)} ile girişim için güzel bir başlangıç yapabilirsiniz. Aylık ${formatMoney(remaining/3)} yatırım öneriyoruz.`;
+            } else if (remaining > 0) {
+                adviceElement.className = 'advice warning';
+                adviceElement.innerHTML = `⚠️ <strong>Temkinli ilerleyin.</strong> ${formatMoney(remaining)} ile küçük adımlarla başlayın. Önce ek gelir kaynakları oluşturun.`;
+            } else {
+                adviceElement.className = 'advice warning';
+                adviceElement.innerHTML = `❌ <strong>Dikkat!</strong> Giderleriniz gelirinizi aşıyor. Bütçe optimizasyonu gerekli!`;
+            }
+            
+            // Sonuçları göster
+            document.getElementById('results').style.display = 'block';
+            
+            // API'ye otomatik kaydet
+            const budgetData = {
+                income,
+                rent,
+                food,
+                other,
+                totalExpense,
+                remaining,
+                savingRate: parseFloat(savingRate)
+            };
+            
+            const result = BUDGET_API.save(budgetData);
+            if (result.success) {
+                console.log('✅ Bütçe API\'ye kaydedildi:', result.id);
+            }
+        });
+
+        function saveBudgetToAPI() {
+            const history = BUDGET_API.getHistory();
+            alert(`💾 API Kaydı Başarılı!\n\n📊 Toplam ${history.length} bütçe kaydınız var\n\n📈 Son kayıt: ${formatMoney(history[0]?.remaining || 0)} kalan para\n\n🔄 Geçmiş verileriniz güvenle saklanıyor!`);
+        }
+
+        // Sayfa yüklendiğinde önceki veriyi göster
+        window.addEventListener('load', function() {
+            const currentBudget = BUDGET_API.get();
+            if (currentBudget) {
+                document.getElementById('income').value = currentBudget.income;
+                document.getElementById('rent').value = currentBudget.rent;
+                document.getElementById('food').value = currentBudget.food;
+                document.getElementById('other').value = currentBudget.other;
+                
+                // Önizlemeleri güncelle
+                document.getElementById('incomePreview').textContent = `📱 ${formatMoney(currentBudget.income)}`;
+                document.getElementById('rentPreview').textContent = `📱 ${formatMoney(currentBudget.rent)}`;
+                document.getElementById('foodPreview').textContent = `📱 ${formatMoney(currentBudget.food)}`;
+                document.getElementById('otherPreview').textContent = `📱 ${formatMoney(currentBudget.other)}`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Seyahat Planım</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2e86de;
+            text-align: center;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #2e86de;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #1e5f8b;
+        }
+        
+        .sonuc {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #d4edda;
+            border-radius: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 Seyahat Planım</h1>
+        <h3>AI Destekli Seyahat Planlayıcı</h3>
+        
+        <p>Hayalinizdeki seyahati planlayalım!</p>
+        
+        <input type="text" id="sehir" placeholder="Hangi şehri ziyaret etmek istiyorsunuz?">
+        <input type="number" id="butce" placeholder="Bütçeniz (TL)">
+        <input type="number" id="gun" placeholder="Kaç gün kalacaksınız?">
+        
+        <button onclick="planOlustur()">🚀 Plan Oluştur</button>
+        
+        <div class="sonuc" id="sonuc">
+            <h3>✈️ Seyahat Planınız:</h3>
+            <p id="plan-detay"></p>
+        </div>
+    </div>
+
+    <script>
+        function planOlustur() {
+            const sehir = document.getElementById('sehir').value;
+            const butce = document.getElementById('butce').value;
+            const gun = document.getElementById('gun').value;
+            
+            if (!sehir || !butce || !gun) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
+            }
+            
+            const gunlukButce = Math.round(butce / gun);
+            
+            let plan = `
+                <strong>📍 Hedef:</strong> ${sehir}<br>
+                <strong>💰 Bütçe:</strong> ${butce} TL<br>
+                <strong>📅 Süre:</strong> ${gun} gün<br>
+                <strong>💵 Günlük Bütçe:</strong> ${gunlukButce} TL<br><br>
+                
+                <strong>🎯 Öneriler:</strong><br>
+            `;
+            
+            if (gunlukButce > 500) {
+                plan += "• Lüks otellerde kalabilirsiniz<br>";
+                plan += "• Şehrin en iyi restoranlarını deneyin<br>";
+                plan += "• Özel turlar katılın<br>";
+            } else if (gunlukButce > 200) {
+                plan += "• Orta seviye oteller uygun<br>";
+                plan += "• Yerel lezzetleri keşfedin<br>";
+                plan += "• Toplu taşıma kullanın<br>";
+            } else {
+                plan += "• Hostel veya pansiyon tercih edin<br>";
+                plan += "• Sokak yemekleri deneyin<br>";
+                plan += "• Yürüyerek gezin<br>";
+            }
+            
+            document.getElementById('plan-detay').innerHTML = plan;
+            document.getElementById('sonuc').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

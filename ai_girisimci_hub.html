@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Girişimci Hub - Başarı Yolculuğunuz Başlıyor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 0 80px;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Features Section */
+        .features {
+            background: white;
+            padding: 80px 0;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            background: #f8f9fa;
+            padding: 80px 0;
+        }
+
+        .pricing h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.popular {
+            border-color: #ff6b6b;
+            transform: scale(1.05);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            color: #666;
+        }
+
+        .pricing-features li:before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* Tools Section */
+        .tools {
+            background: white;
+            padding: 80px 0;
+        }
+
+        .tools h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tool-card:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .tool-card h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">🚀 AI Girişimci Hub</div>
+            <ul class="nav-links">
+                <li><a href="#features">Özellikler</a></li>
+                <li><a href="#tools">Araçlar</a></li>
+                <li><a href="#pricing">Fiyatlar</a></li>
+                <li><a href="#contact">İletişim</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>AI Girişimci Ol!</h1>
+            <p>Yapay zeka çağında girişimcilik yolculuğunuz için ihtiyacınız olan tüm araçlar bir arada</p>
+            <a href="#tools" class="cta-button">Hemen Başla - Ücretsiz!</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Neden AI Girişimci Hub?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Akıllı Bütçe Yönetimi</h3>
+                    <p>Girişimcilik hedefleriniz için bütçenizi optimize edin. Tasarruf önerilerim ve yatırım planları.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Proje Takip Sistemi</h3>
+                    <p>AI destekli görev yönetimi ile projelerinizi zamanında tamamlayın. Akıllı öncelik belirleme.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Mentor</h3>
+                    <p>24/7 AI mentorünüz size girişimcilik yolculuğunda rehberlik eder. Sorularınıza anında cevap.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="tools" id="tools">
+        <div class="container">
+            <h2>Ücretsiz Araçlarımız</h2>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="openTool('budget')">
+                    <h4>💰 Bütçe Hesaplayıcı</h4>
+                    <p>Girişim bütçenizi hesaplayın</p>
+                </div>
+                <div class="tool-card" onclick="openTool('tasks')">
+                    <h4>📋 Görev Yöneticisi</h4>
+                    <p>Projelerinizi takip edin</p>
+                </div>
+                <div class="tool-card" onclick="openTool('motivation')">
+                    <h4>🔥 Motivasyon Merkezi</h4>
+                    <p>Günlük motivasyon alın</p>
+                </div>
+                <div class="tool-card" onclick="openTool('chatbot')">
+                    <h4>🤖 AI Asistan</h4>
+                    <p>Anında destek alın</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Fiyat Planları</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Ücretsiz</h3>
+                    <div class="price">₺0<span style="font-size: 1rem;">/ay</span></div>
+                    <ul class="pricing-features">
+                        <li>Temel bütçe hesaplayıcı</li>
+                        <li>5 proje takibi</li>
+                        <li>Günlük motivasyon</li>
+                        <li>Topluluk desteği</li>
+                    </ul>
+                    <a href="#" class="cta-button">Başla</a>
+                </div>
+                <div class="pricing-card popular">
+                    <div class="popular-badge">En Popüler</div>
+                    <h3>Pro</h3>
+                    <div class="price">₺99<span style="font-size: 1rem;">/ay</span></div>
+                    <ul class="pricing-features">
+                        <li>Sınırsız proje</li>
+                        <li>AI mentoring</li>
+                        <li>Gelişmiş analytics</li>
+                        <li>API entegrasyonları</li>
+                        <li>Öncelikli destek</li>
+                    </ul>
+                    <a href="#" class="cta-button">Pro'ya Geç</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 AI Girişimci Hub. Tüm hakları saklıdır.</p>
+            <p>🚀 Sero tarafından geliştirildi - AI girişimci yolculuğunuz için!</p>
+        </div>
+    </footer>
+
+    <script>
+        function openTool(toolName) {
+            if (toolName === 'budget') {
+                window.location.href = 'budget_api.html';
+            } else if (toolName === 'tasks') {
+                window.location.href = 'tasks_api.html';
+            } else if (toolName === 'chatbot') {
+                window.location.href = 'ai_assistant_api.html';
+            } else if (toolName === 'motivation') {
+                window.location.href = 'motivation_api.html';
+            } else {
+                alert(`${toolName} aracı yakında açılacak! 🚧\n\nŞu anda geliştirme aşamasında...`);
+            }
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.1)';
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

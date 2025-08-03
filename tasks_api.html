@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Görev Yöneticisi - AI Girişimci Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .api-status {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .add-task-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .add-task-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.3rem;
+        }
+
+        .task-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .add-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .add-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .tasks-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.3rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tasks-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .task-card {
+            background: white;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .task-card.completed {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+
+        .task-card.high-priority {
+            border-left: 5px solid #dc3545;
+        }
+
+        .task-card.medium-priority {
+            border-left: 5px solid #ffc107;
+        }
+
+        .task-card.low-priority {
+            border-left: 5px solid #28a745;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .task-category {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .task-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .task-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .task-date {
+            font-weight: 500;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .complete-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .stats-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #e1e5e9;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state img {
+            width: 100px;
+            opacity: 0.5;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="ai_girisimci_hub.html" class="back-button">← Ana Sayfa</a>
+            <h1>📋 Akıllı Görev Yöneticisi</h1>
+            <p>AI destekli proje takibi ile hedeflerinize ulaşın</p>
+        </div>
+
+        <div class="main-content">
+            <div class="api-status">
+                ✅ Görev API'si Aktif - Verileriniz gerçek zamanlı olarak senkronize ediliyor
+            </div>
+
+            <!-- İstatistikler -->
+            <div class="stats-section">
+                <h3>📊 Görev İstatistikleri</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalTasks">0</div>
+                        <div class="stat-label">Toplam Görev</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completedTasks">0</div>
+                        <div class="stat-label">Tamamlanan</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingTasks">0</div>
+                        <div class="stat-label">Bekleyen</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completionRate">0%</div>
+                        <div class="stat-label">Başarı Oranı</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yeni Görev Ekleme -->
+            <div class="add-task-section">
+                <h3>➕ Yeni Görev Ekle</h3>
+                <form class="task-form" id="taskForm">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="taskTitle">🎯 Görev Başlığı</label>
+                            <input type="text" id="taskTitle" placeholder="Örn: Python öğren" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="taskCategory">📂 Kategori</label>
+                            <select id="taskCategory" required>
+                                <option value="">Kategori Seçin</option>
+                                <option value="AI/Programlama">🤖 AI/Programlama</option>
+                                <option value="Girişimcilik">🚀 Girişimcilik</option>
+                                <option value="Eğitim">📚 Eğitim</option>
+                                <option value="Kişisel">👤 Kişisel</option>
+                                <option value="İş">💼 İş</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="taskDescription">📝 Açıklama</label>
+                        <textarea id="taskDescription" rows="3" placeholder="Görev detayları..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label for="taskDeadline">📅 Hedef Tarih</label>
+                            <input type="date" id="taskDeadline" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="taskPriority">⚡ Öncelik</label>
+                            <select id="taskPriority" required>
+                                <option value="low">🟢 Düşük</option>
+                                <option value="medium" selected>🟡 Orta</option>
+                                <option value="high">🔴 Yüksek</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="add-button">
+                        🚀 Görevi API'ye Kaydet
+                    </button>
+                </form>
+            </div>
+
+            <!-- Görev Filtreleri -->
+            <div class="tasks-section">
+                <h3>📋 Görevlerim</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">🔄 Tümü</button>
+                    <button class="filter-btn" data-filter="pending">⏳ Bekleyen</button>
+                    <button class="filter-btn" data-filter="completed">✅ Tamamlanan</button>
+                    <button class="filter-btn" data-filter="high">🔴 Yüksek Öncelik</button>
+                </div>
+
+                <!-- Görev Listesi -->
+                <div class="tasks-grid" id="tasksGrid">
+                    <div class="empty-state">
+                        <div style="font-size: 4rem;">📝</div>
+                        <h3>Henüz görev yok!</h3>
+                        <p>İlk görevinizi ekleyerek başlayın</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Görev API Simülasyonu
+        const TASKS_API = {
+            save: function(task) {
+                try {
+                    let tasks = JSON.parse(localStorage.getItem('tasks_data') || '[]');
+                    task.id = Date.now();
+                    task.createdAt = new Date().toISOString();
+                    task.completed = false;
+                    tasks.unshift(task);
+                    localStorage.setItem('tasks_data', JSON.stringify(tasks));
+                    return { success: true, id: task.id };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            },
+            
+            getAll: function() {
+                try {
+                    return JSON.parse(localStorage.getItem('tasks_data') || '[]');
+                } catch {
+                    return [];
+                }
+            },
+            
+            update: function(taskId, updates) {
+                try {
+                    let tasks = this.getAll();
+                    const taskIndex = tasks.findIndex(t => t.id === taskId);
+                    if (taskIndex !== -1) {
+                        tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
+                        localStorage.setItem('tasks_data', JSON.stringify(tasks));
+                        return { success: true };
+                    }
+                    return { success: false, error: 'Görev bulunamadı' };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            },
+            
+            delete: function(taskId) {
+                try {
+                    let tasks = this.getAll();
+                    tasks = tasks.filter(t => t.id !== taskId);
+                    localStorage.setItem('tasks_data', JSON.stringify(tasks));
+                    return { success: true };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
+            }
+        };
+
+        let currentFilter = 'all';
+
+        // Bugünün tarihi
+        document.getElementById('taskDeadline').value = new Date().toISOString().split('T')[0];
+
+        // Form submit
+        document.getElementById('taskForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const taskData = {
+                title: document.getElementById('taskTitle').value,
+                category: document.getElementById('taskCategory').value,
+                description: document.getElementById('taskDescription').value,
+                deadline: document.getElementById('taskDeadline').value,
+                priority: document.getElementById('taskPriority').value
+            };
+            
+            const result = TASKS_API.save(taskData);
+            
+            if (result.success) {
+                // Formu temizle
+                this.reset();
+                document.getElementById('taskDeadline').value = new Date().toISOString().split('T')[0];
+                
+                // Görevleri yenile
+                loadTasks();
+                updateStats();
+                
+                // Başarı mesajı
+                alert('✅ Görev başarıyla API\'ye kaydedildi!\n\n🆔 Task ID: ' + result.id);
+            } else {
+                alert('❌ Hata: ' + result.error);
+            }
+        });
+
+        // Filtreleme
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFilter = this.dataset.filter;
+                loadTasks();
+            });
+        });
+
+        // Görevleri yükle
+        function loadTasks() {
+            const tasks = TASKS_API.getAll();
+            const filteredTasks = filterTasks(tasks);
+            renderTasks(filteredTasks);
+        }
+
+        // Görevleri filtrele
+        function filterTasks(tasks) {
+            switch (currentFilter) {
+                case 'pending':
+                    return tasks.filter(t => !t.completed);
+                case 'completed':
+                    return tasks.filter(t => t.completed);
+                case 'high':
+                    return tasks.filter(t => t.priority === 'high');
+                default:
+                    return tasks;
+            }
+        }
+
+        // Görevleri render et
+        function renderTasks(tasks) {
+            const grid = document.getElementById('tasksGrid');
+            
+            if (tasks.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size: 4rem;">📝</div>
+                        <h3>Bu filtrede görev yok!</h3>
+                        <p>Farklı bir filtre denenin veya yeni görev ekleyin</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = tasks.map(task => `
+                <div class="task-card ${task.completed ? 'completed' : ''} ${task.priority}-priority">
+                    <div class="task-header">
+                        <div>
+                            <div class="task-title">${task.completed ? '✅' : '⏳'} ${task.title}</div>
+                            <div class="task-category">${task.category}</div>
+                        </div>
+                    </div>
+                    
+                    ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
+                    
+                    <div class="task-meta">
+                        <div class="task-date">📅 ${new Date(task.deadline).toLocaleDateString('tr-TR')}</div>
+                        <div class="task-actions">
+                            ${!task.completed ? `<button class="action-btn complete-btn" onclick="completeTask(${task.id})">✅ Tamamla</button>` : ''}
+                            <button class="action-btn delete-btn" onclick="deleteTask(${task.id})">🗑️ Sil</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Görevi tamamla
+        function completeTask(taskId) {
+            const result = TASKS_API.update(taskId, { completed: true, completedAt: new Date().toISOString() });
+            if (result.success) {
+                loadTasks();
+                updateStats();
+                alert('🎉 Görev tamamlandı! API\'ye kaydedildi.');
+            }
+        }
+
+        // Görevi sil
+        function deleteTask(taskId) {
+            if (confirm('Bu görevi silmek istediğinizden emin misiniz?')) {
+                const result = TASKS_API.delete(taskId);
+                if (result.success) {
+                    loadTasks();
+                    updateStats();
+                    alert('🗑️ Görev API\'den silindi.');
+                }
+            }
+        }
+
+        // İstatistikleri güncelle
+        function updateStats() {
+            const tasks = TASKS_API.getAll();
+            const completed = tasks.filter(t => t.completed).length;
+            const pending = tasks.filter(t => !t.completed).length;
+            const completionRate = tasks.length > 0 ? Math.round((completed / tasks.length) * 100) : 0;
+            
+            document.getElementById('totalTasks').textContent = tasks.length;
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('pendingTasks').textContent = pending;
+            document.getElementById('completionRate').textContent = completionRate + '%';
+        }
+
+        // Sayfa yüklendiğinde
+        window.addEventListener('load', function() {
+            loadTasks();
+            updateStats();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+{
+  "kullanici_bilgisi": {},
+  "konusma_gecmisi": [
+    {
+      "zaman": "2025-08-02T22:57:57.434691",
+      "kullanici": "selam",
+      "aida": "Merhaba Sero! Ben AIDA, Claude destekli AI asistanın! 🤖 Bugün hangi konuda sohbet edelim?"
+    },
+    {
+      "zaman": "2025-08-02T22:58:05.315253",
+      "kullanici": "Nasıl hissediyorsun",
+      "aida": "'nasıl hissediyorsun' konusunda konuşalım! Bu konuda ne düşünüyorsun veya hangi yardıma ihtiyacın var? 💭"
+    },
+    {
+      "zaman": "2025-08-02T22:58:19.131063",
+      "kullanici": "Kaç yaşındasın",
+      "aida": "'yaşındasın' konusunda konuşalım! Bu konuda ne düşünüyorsun veya hangi yardıma ihtiyacın var? 💭"
+    },
+    {
+      "zaman": "2025-08-02T23:01:07.429281",
+      "kullanici": "& C:/Python313/python.exe d:/ilk_kodum.py/claude_aida.py",
+      "aida": "Python konusunda yardım edebilirim! Cursor ile hangi projeyi geliştiriyorsun? Takıldığın bir yer var mı? 💻"
+    },
+    {
+      "zaman": "2025-08-02T23:01:40.305485",
+      "kullanici": "selam",
+      "aida": "Merhaba Sero! Ben AIDA, Claude destekli AI asistanın! 🤖 Bugün hangi konuda sohbet edelim?"
+    },
+    {
+      "zaman": "2025-08-02T23:01:49.441675",
+      "kullanici": "nasıl hissediyorsun",
+      "aida": "'nasıl hissediyorsun' konusunda konuşalım! Bu konuda ne düşünüyorsun veya hangi yardıma ihtiyacın var? 💭"
+    },
+    {
+      "zaman": "2025-08-02T23:02:00.657833",
+      "kullanici": "Bana yazılım konusunda yardımcı olabilir misin",
+      "aida": "'bana yazılım' konusunda konuşalım! Bu konuda ne düşünüyorsun veya hangi yardıma ihtiyacın var? 💭"
+    },
+    {
+      "zaman": "2025-08-02T23:04:05.069118",
+      "kullanici": "& C:/Python313/python.exe d:/ilk_kodum.py/claude_aida.py",
+      "aida": "Python konusunda yardım edebilirim! Cursor ile hangi projeyi geliştiriyorsun? Takıldığın bir yer var mı? 💻"
+    },
+    {
+      "zaman": "2025-08-02T23:04:13.640842",
+      "kullanici": "naber",
+      "aida": "İyiyim! Senin AI girişimci yolculuğunu takip ediyorum. Son projelerinde nasıl gidiyor? 🚀"
+    },
+    {
+      "zaman": "2025-08-02T23:04:23.897297",
+      "kullanici": "sanırım hızlı bir giriş yaptım",
+      "aida": "Girişimcilik konusunda konuşalım! 30.000 TL tasarrufun var, harika bir başlangıç. Hangi alanda girişim yapmayı planlıyorsun? 💰"
+    },
+    {
+      "zaman": "2025-08-02T23:04:31.688667",
+      "kullanici": "bilmiyorum",
+      "aida": "'bilmiyorum' konusunda konuşalım! Bu konuda ne düşünüyorsun veya hangi yardıma ihtiyacın var? 💭"
+    },
+    {
+      "zaman": "2025-08-02T23:04:38.296850",
+      "kullanici": "bana yol göster",
+      "aida": "'bana göster' konusunda konuşalım! Bu konuda ne düşünüyorsun veya hangi yardıma ihtiyacın var? 💭"
+    },
+    {
+      "zaman": "2025-08-02T23:06:42.936587",
+      "kullanici": "selam",
+      "aida": "Merhaba Sero! Ben AIDA, Claude destekli AI asistanın! 🤖 Bugün hangi konuda sohbet edelim?"
+    },
+    {
+      "zaman": "2025-08-02T23:06:47.551872",
+      "kullanici": "nasılsın",
+      "aida": "İyiyim! Senin AI girişimci yolculuğunu takip ediyorum. Son projelerinde nasıl gidiyor? 🚀"
+    },
+    {
+      "zaman": "2025-08-02T23:06:53.279975",
+      "kullanici": "gayet güzel",
+      "aida": "'gayet güzel' konusunda konuşalım! Bu konuda ne düşünüyorsun veya hangi yardıma ihtiyacın var? 💭"
+    },
+    {
+      "zaman": "2025-08-02T23:07:01.775972",
+      "kullanici": "29 yaşındayım",
+      "aida": "'yaşındayım' konusunda konuşalım! Bu konuda ne düşünüyorsun veya hangi yardıma ihtiyacın var? 💭"
+    },
+    {
+      "zaman": "2025-08-03T00:49:01.015306",
+      "kullanici": "& C:/Python313/python.exe d:/ilk_kodum.py/rezervasyon_botu.py",
+      "aida": "Python konusunda yardım edebilirim! Cursor ile hangi projeyi geliştiriyorsun? Takıldığın bir yer var mı? 💻"
+    }
+  ],
+  "son_guncelleme": "2025-08-03T00:49:01.015336"
+}

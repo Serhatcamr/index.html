@@ -1,0 +1,31 @@
+{
+  "kullanici_bilgisi": {},
+  "konusma_gecmisi": [
+    {
+      "zaman": "2025-08-02T22:52:26.094452",
+      "kullanici": "Selam",
+      "aida": "Üzgünüm, şu anda bir teknik sorun yaşıyorum: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}} 🔧 Tekrar dener misin?"
+    },
+    {
+      "zaman": "2025-08-02T22:54:36.239935",
+      "kullanici": "& C:/Python313/python.exe d:/ilk_kodum.py/claude_aida.py",
+      "aida": "Üzgünüm, şu anda bir teknik sorun yaşıyorum: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}} 🔧 Tekrar dener misin?"
+    },
+    {
+      "zaman": "2025-08-02T22:54:41.291396",
+      "kullanici": "selam",
+      "aida": "Üzgünüm, şu anda bir teknik sorun yaşıyorum: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}} 🔧 Tekrar dener misin?"
+    },
+    {
+      "zaman": "2025-08-02T22:55:59.116347",
+      "kullanici": "selam",
+      "aida": "Üzgünüm, şu anda bir teknik sorun yaşıyorum: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}} 🔧 Tekrar dener misin?"
+    },
+    {
+      "zaman": "2025-08-02T22:57:13.617606",
+      "kullanici": "selam",
+      "aida": "Üzgünüm, şu anda bir teknik sorun yaşıyorum: Error code: 429 - {'error': {'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.', 'type': 'insufficient_quota', 'param': None, 'code': 'insufficient_quota'}} 🔧 Tekrar dener misin?"
+    }
+  ],
+  "son_guncelleme": "2025-08-02T22:57:13.617621"
+}
